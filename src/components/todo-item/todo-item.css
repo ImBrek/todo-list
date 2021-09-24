@@ -1,0 +1,32 @@
+.todo-item {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: 2fr 2fr 1fr 1fr;
+}
+
+.todo-item__text {
+    border: 1px solid grey;
+    background-color: white;
+    height: 63px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 19px;
+    font-weight: 500;
+    padding: 10px;
+}
+
+.todo-item__input {
+    border: 1px solid grey;
+    background-color: white;
+    height: 63px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 28px;
+}
+
+.todo-item__checkbox {
+    width: 20px;
+    height: 20px;
+}
