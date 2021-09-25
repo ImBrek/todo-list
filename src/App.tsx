@@ -13,16 +13,14 @@ const App = observer(() => {
     <StoreProvider store={store}>
       <Router>
         <div className="app">
-          <div className="app__container">
-            <Switch>
-              <Route exact path="/">
-                <RegistrationPage></RegistrationPage>
-              </Route>
-              <Route path="/todo-list">
-                <TodoListPage></TodoListPage>
-              </Route>
-            </Switch>
-          </div>
+          <Switch>
+            <Route exact path="/">
+              <RegistrationPage></RegistrationPage>
+            </Route>
+            <Route path="/todo-list">
+              <TodoListPage></TodoListPage>
+            </Route>
+          </Switch>
         </div>
       </Router>
     </StoreProvider>

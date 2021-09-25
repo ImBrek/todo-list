@@ -4,12 +4,7 @@ import { useStore } from '../../store';
 import TodoItem from '../todo-item';
 import './todo-list.css';
 
-type TodoListProps = {
-  completedTasks: number;
-  tasks: number;
-};
-
-const TodoList: FC<TodoListProps> = observer(({ completedTasks, tasks }) => {
+const TodoList: FC = observer(() => {
   const store = useStore();
   const { tasksName } = store;
   const [texts, setTexts] = useState(tasksName);
@@ -25,6 +20,10 @@ const TodoList: FC<TodoListProps> = observer(({ completedTasks, tasks }) => {
     setTexts(tasksName);
   }, [store, tasksName]);
 
+  useEffect(() => {
+    store.getUserData();
+  }, [store]);
+
   return (
     <div className="todo-list">
       <input
@@ -35,12 +34,13 @@ const TodoList: FC<TodoListProps> = observer(({ completedTasks, tasks }) => {
         onChange={event => setSearchValue(event.target.value)}
       />
       <div className="todo-list__items">
-        {texts.map((data, index) => (
+        {texts.map(data => (
           <TodoItem
-            text={data.name}
-            date={`${data.date}мин назад`}
-            key={data.date}
-            onClick={() => store.removeTask(index)}
+            name={data.name}
+            date={data.date.fromNow()}
+            key={data.date.fromNow()}
+            complete={data.complete}
+            onClick={() => store.removeTask(data)}
           ></TodoItem>
         ))}
       </div>
@@ -49,17 +49,11 @@ const TodoList: FC<TodoListProps> = observer(({ completedTasks, tasks }) => {
           новая задача
         </button>
         <div className="todo-list__complete">
-          {completedTasks} из {tasks} задач выполнены
+          {store.completedTasksCount} из {store.tasksCount} задач выполнены
         </div>
       </div>
     </div>
   );
 });
 
-// const texts = [
-//   ["Купить колбасу", "40 мин назад"],
-//   ["Посетить спортзал", "1 час назад"],
-//   ["Найти работу", "1 мин назад"],
-//   ["Прочитать что-то", "5 дней назад"],
-// ];
 export default TodoList;

@@ -19,7 +19,7 @@ const RegistrationForm: FC = () => {
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     store.isAuthorized = true;
-    store.addNewUser(name, surname);
+    store.initUser(name, surname);
     history.push(`/todo-list`);
   };
 
@@ -30,7 +30,7 @@ const RegistrationForm: FC = () => {
         isLinkActive ? handleFormSubmit(event) : event.preventDefault()
       }
     >
-      <h1>Регистрация</h1>
+      <h1>Авторизация</h1>
       <input
         className="registration-form__input"
         type="text"
@@ -52,8 +52,12 @@ const RegistrationForm: FC = () => {
         placeholder="Пароль"
         onChange={event => setPassword(event.target.value)}
       />
-      <button type="submit" disabled={!isLinkActive}>
-        Зарегистрироваться
+      <button
+        className="registration-form__button"
+        type="submit"
+        disabled={!isLinkActive}
+      >
+        Войти
       </button>
     </form>
   );

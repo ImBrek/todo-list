@@ -1,4 +1,6 @@
 import React, { FC } from 'react';
+import { Link } from 'react-router-dom';
+import { useStore } from '../../store';
 import './account.css';
 import avatar from './img/avatar.png';
 
@@ -8,6 +10,8 @@ type AccountProps = {
 };
 
 const Account: FC<AccountProps> = ({ name, surname }) => {
+  const store = useStore();
+
   return (
     <div className="account">
       <img src={avatar} alt="avatar" className="account__avatar" />
@@ -15,10 +19,15 @@ const Account: FC<AccountProps> = ({ name, surname }) => {
         <div className="account__name">
           {name} {surname}
         </div>
-        <a href="http://" className="account__button">
-          {' '}
+        <Link
+          to="/"
+          className="account__button"
+          onClick={() => {
+            store.isAuthorized = false;
+          }}
+        >
           logout
-        </a>
+        </Link>
       </div>
     </div>
   );

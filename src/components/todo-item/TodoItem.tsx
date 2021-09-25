@@ -5,22 +5,26 @@ import archive from './img/archive.svg';
 import { useStore } from '../../store';
 
 type TodoItemProps = {
-  text: string;
+  name: string;
   date: string;
-  onClick: any;
+  complete: boolean;
+  onClick: React.MouseEventHandler<HTMLInputElement>;
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
 };
 
-const TodoItem: FC<TodoItemProps> = observer(({ text, date, onClick }) => {
+const TodoItem: FC<TodoItemProps> = observer(({ name, date, complete, onClick }) => {
+  const [checked, setChecked] = useState(complete);
   const store = useStore();
-  const [checked, setChecked] = useState(false);
+
   useEffect(() => {
     checked ? store.addCompletedTasks() : store.removeCompletedTasks();
   }, [checked, store]);
+
   return (
     <div className="todo-item">
-      <div className="todo-item__text">{text}</div>
-      <div className="todo-item__text">{date}</div>
-      <div className="todo-item__input">
+      <div className="todo-item__cell">{name}</div>
+      <div className="todo-item__cell">{date}</div>
+      <div className="todo-item__cell">
         <input
           className="todo-item__checkbox"
           type="checkbox"
@@ -28,7 +32,7 @@ const TodoItem: FC<TodoItemProps> = observer(({ text, date, onClick }) => {
           onChange={() => setChecked(!checked)}
         />
       </div>
-      <div className="todo-item__input">
+      <div className="todo-item__cell">
         <input
           className="todo-item__archive"
           type="image"

@@ -2,17 +2,11 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-const PATHS = {
-  src: path.join(__dirname, '../src'),
-  dist: path.join(__dirname, '../dist'),
-  assets: 'assets/',
-};
-
 module.exports = {
-  entry: `${PATHS.src}/index.js`,
+  entry: `${path.join(__dirname, '../src')}/index.tsx`,
   output: {
     filename: '[name].js',
-    path: `${PATHS.dist}`,
+    path: path.join(__dirname, '../dist'),
     clean: true,
   },
   optimization: {
