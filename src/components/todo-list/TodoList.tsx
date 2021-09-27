@@ -1,16 +1,18 @@
 import React, { FC } from 'react';
 import { observer } from 'mobx-react-lite';
-import moment from 'moment';
-import 'moment/locale/ru';
 
 import taskStore from '../../store/task-store/TaskStore';
 import TodoItem from '../todo-item';
 
 import './todo-list.css';
+import { Task } from '../../store/task-store/taskStoreTypes';
+import formattedDate from '../../utils/formatDate';
 
 const TodoList: FC = observer(() => {
   const {
     addTask,
+    updateStatus,
+    archiveTask,
     changeFilter,
     filteredTasks,
     filterQuery,
@@ -18,16 +20,28 @@ const TodoList: FC = observer(() => {
     tasksCount,
   } = taskStore;
 
+  const onChangeFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
+    changeFilter(event.target.value);
+  };
+
   const createTask = () => {
     const taskName = prompt('Введите название');
     if (taskName) addTask(taskName);
   };
 
-  const onChangeFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
-    changeFilter(event.target.value);
+  const onClickArchive = (task: Task) => {
+    archiveTask({ ...task, archived: true });
   };
 
-  const formatDate = (date: string) => moment(date, 'YYYYMMDD, hh:mm:ss').fromNow();
+  const onChangeCheckbox = (task: Task) => {
+    updateStatus({ ...task, completed: !task.completed });
+  };
+
+  const getDate = (createdAt: string) => {
+    return {
+      createdAt: formattedDate.fromNow(createdAt),
+    };
+  };
 
   return (
     <div className="todo-list">
@@ -39,14 +53,12 @@ const TodoList: FC = observer(() => {
         onChange={onChangeFilter}
       />
       <div className="todo-list__items">
-        {filteredTasks.map(data => (
+        {filteredTasks.map(task => (
           <TodoItem
-            title={data.title}
-            date={formatDate(data.createdAt)}
-            key={data.id}
-            completed={data.completed}
-            archived={data.archived}
-            id={data.id}
+            task={{ ...task, ...getDate(task.createdAt) }}
+            key={task.id}
+            onClickArchive={onClickArchive.bind(this, task)}
+            onChangeCheckbox={onChangeCheckbox.bind(this, task)}
           ></TodoItem>
         ))}
       </div>
