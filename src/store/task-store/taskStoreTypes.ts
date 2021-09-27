@@ -12,5 +12,3 @@ export type RawTask = {
   completed: boolean;
   userId: string;
 };
-
-export type TaskRequest = Omit<Task, 'id'>;
