@@ -10,12 +10,12 @@ import './todo-list.css';
 
 const TodoList: FC = observer(() => {
   const {
-    filteredTasks,
+    addTask,
     changeFilter,
+    filteredTasks,
     filterQuery,
     completedTasksCount,
     tasksCount,
-    addTask,
   } = taskStore;
 
   const createTask = () => {

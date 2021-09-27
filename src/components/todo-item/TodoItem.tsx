@@ -16,22 +16,23 @@ type TodoItemProps = {
 
 const TodoItem: FC<TodoItemProps> = observer(
   ({ title, date, completed, id, archived }) => {
-    if (archived) return null;
     const [checked, setChecked] = useState(completed);
 
-    const { updateStatus } = taskStore;
+    const { updateStatus, removeTask } = taskStore;
 
-    const onChange = () => {
+    const onChangeCheckbox = () => {
       setChecked(!checked);
     };
 
-    const onClick = () => {
-      updateStatus({ id, archived: true });
+    const onClickArchive = () => {
+      removeTask({ id, archived: true });
     };
 
     useEffect(() => {
       updateStatus({ id, completed: checked });
     }, [checked]);
+
+    if (archived) return null;
 
     return (
       <div className="todo-item">
@@ -42,7 +43,7 @@ const TodoItem: FC<TodoItemProps> = observer(
             className="todo-item__checkbox"
             type="checkbox"
             checked={completed}
-            onChange={onChange}
+            onChange={onChangeCheckbox}
           />
         </div>
         <div className="todo-item__cell">
@@ -51,7 +52,7 @@ const TodoItem: FC<TodoItemProps> = observer(
             type="image"
             src={archive}
             alt="archive"
-            onClick={onClick}
+            onClick={onClickArchive}
           />
         </div>
       </div>

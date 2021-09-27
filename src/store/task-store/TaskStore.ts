@@ -28,13 +28,13 @@ class TaskStore {
     return this.filteredTasks.length;
   }
 
-  get completedTasksCount() {
-    return this.filteredTasks.filter(item => item.completed).length;
-  }
-
   get filteredTasks() {
     const regexp = new RegExp(this.filterQuery, 'gi');
     return this.tasks.filter(item => item.title.match(regexp));
+  }
+
+  get completedTasksCount() {
+    return this.filteredTasks.filter(item => item.completed).length;
   }
 
   changeFilter(value: string) {
@@ -64,11 +64,12 @@ class TaskStore {
     }
   }
 
-  async removeTask(taskId: number): Promise<void> {
+  async removeTask(task: Partial<Task>): Promise<void> {
     try {
-      await service.deleteTask(taskId);
+      await service.updateTask(task);
+      const newTasks = this.tasks.filter(item => item.id !== task.id);
       runInAction(() => {
-        this.tasks = this.tasks.filter(item => item.id !== taskId);
+        this.tasks = newTasks;
       });
     } catch (error) {
       console.error(error);

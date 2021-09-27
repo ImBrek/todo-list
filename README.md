@@ -28,7 +28,7 @@ http://localhost:8080/ адрес локального сервера.
 
 ## Authorization
 
-Процесс авторизации происходит при помощи сервиса [JSONPlaceholder](https://jsonplaceholder.typicode.com/). Чтобы авториззоваться необходимо ввести правильный логин.
+Процесс авторизации происходит при помощи сервиса [JSONPlaceholder](https://jsonplaceholder.typicode.com/). Чтобы авторизоваться необходимо ввести правильный логин.
 
 ```commandline
 Bret
