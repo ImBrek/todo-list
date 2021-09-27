@@ -1,8 +1,8 @@
-/* eslint-disable no-console */
 import { makeObservable, runInAction, observable, action, computed } from 'mobx';
 
 import { Task } from './taskStoreTypes';
 import service from './taskStoreService';
+import formattedDate from '../../utils/formatDate';
 
 class TaskStore {
   tasks: Array<Task> = [];
@@ -20,7 +20,7 @@ class TaskStore {
       retrieveTasks: action.bound,
       addTask: action.bound,
       updateStatus: action.bound,
-      removeTask: action.bound,
+      archiveTask: action.bound,
     });
   }
 
@@ -30,7 +30,10 @@ class TaskStore {
 
   get filteredTasks() {
     const regexp = new RegExp(this.filterQuery, 'gi');
-    return this.tasks.filter(item => item.title.match(regexp));
+    const tasks = this.tasks
+      .filter(item => item.title.match(regexp))
+      .filter(item => !item.archived);
+    return tasks;
   }
 
   get completedTasksCount() {
@@ -45,8 +48,9 @@ class TaskStore {
 
   async retrieveTasks(): Promise<void> {
     try {
+      const tasks = await service.retrieveTasks();
       runInAction(async () => {
-        this.tasks = await service.retrieveTasks();
+        this.tasks = tasks;
       });
     } catch (e) {
       console.error('error', e);
@@ -56,28 +60,38 @@ class TaskStore {
   async addTask(taskName: string): Promise<void> {
     try {
       const newTask = await service.addTask(taskName);
+      const newTaskWithDate = {
+        ...newTask,
+        createdAt: formattedDate.dateNow(),
+      };
+      console.log(newTaskWithDate);
       runInAction(() => {
-        this.tasks = [...this.tasks, newTask];
+        this.tasks = [...this.tasks, newTaskWithDate];
       });
     } catch (e) {
       console.error('error', e);
     }
   }
 
-  async removeTask(task: Partial<Task>): Promise<void> {
+  async archiveTask(task: Partial<Task>): Promise<void> {
     try {
       await service.updateTask(task);
+    } catch (error) {
+      console.error(error);
+    } finally {
       const newTasks = this.tasks.filter(item => item.id !== task.id);
       runInAction(() => {
         this.tasks = newTasks;
       });
-    } catch (error) {
-      console.error(error);
     }
   }
 
   async updateStatus(task: Partial<Task>): Promise<void> {
     try {
+      await service.updateTask(task);
+    } catch (error) {
+      console.error(error);
+    } finally {
       const newTasks = this.tasks.map(item => {
         if (item.id === task.id) {
           return { ...item, ...task };
@@ -87,9 +101,6 @@ class TaskStore {
       runInAction(() => {
         this.tasks = [...newTasks];
       });
-      await service.updateTask(task);
-    } catch (error) {
-      console.error(error);
     }
   }
 }
