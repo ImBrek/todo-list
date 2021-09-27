@@ -1,43 +1,24 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC } from 'react';
 import { observer } from 'mobx-react-lite';
-
-import taskStore from '../../store/task-store/TaskStore';
 
 import './todo-item.css';
 import archive from './img/archive.svg';
+import { Task } from '../../store/task-store/taskStoreTypes';
 
 type TodoItemProps = {
-  id: number;
-  title: string;
-  date: string;
-  completed: boolean;
-  archived?: boolean;
+  task: Task;
+  onClickArchive: React.MouseEventHandler<HTMLInputElement>;
+  onChangeCheckbox: React.ChangeEventHandler<HTMLInputElement>;
 };
 
 const TodoItem: FC<TodoItemProps> = observer(
-  ({ title, date, completed, id, archived }) => {
-    const [checked, setChecked] = useState(completed);
-
-    const { updateStatus, removeTask } = taskStore;
-
-    const onChangeCheckbox = () => {
-      setChecked(!checked);
-    };
-
-    const onClickArchive = () => {
-      removeTask({ id, archived: true });
-    };
-
-    useEffect(() => {
-      updateStatus({ id, completed: checked });
-    }, [checked]);
-
-    if (archived) return null;
+  ({ task, onClickArchive, onChangeCheckbox }) => {
+    const { title, createdAt, completed } = task;
 
     return (
       <div className="todo-item">
         <div className="todo-item__cell">{title}</div>
-        <div className="todo-item__cell">{date}</div>
+        <div className="todo-item__cell">{createdAt}</div>
         <div className="todo-item__cell">
           <input
             className="todo-item__checkbox"
