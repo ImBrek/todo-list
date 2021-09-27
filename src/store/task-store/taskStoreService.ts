@@ -1,4 +1,4 @@
-import taskMapper from '../../utils/mappers/taskMapper';
+import taskMapper from '../../utils/taskMapper';
 import { RawTask, Task } from './taskStoreTypes';
 
 const service = {
@@ -30,10 +30,9 @@ const service = {
       });
   },
 
-  async updateTask(task: Partial<Task>): Promise<void> {
+  async updateTask(task: Partial<Task>): Promise<Task> {
     const { id, completed, archived } = task;
-
-    fetch(`https://jsonplaceholder.typicode.com/todos/${id}`, {
+    return fetch(`https://jsonplaceholder.typicode.com/todos/${id}`, {
       method: 'PUT',
       body: JSON.stringify({
         completed,
@@ -42,13 +41,17 @@ const service = {
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
       },
-    });
+    })
+      .then(response => response.json())
+      .then(updatedTask => updatedTask);
   },
 
-  async deleteTask(id: number): Promise<void> {
-    fetch(`https://jsonplaceholder.typicode.com/todos/${id}`, {
+  async deleteTask(id: number): Promise<Task> {
+    return fetch(`https://jsonplaceholder.typicode.com/todos/${id}`, {
       method: 'DELETE',
-    });
+    })
+      .then(response => response.json())
+      .then(deleteTask => deleteTask);
   },
 };
 
