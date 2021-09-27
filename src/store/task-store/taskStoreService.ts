@@ -1,5 +1,5 @@
 import taskMapper from '../../utils/mappers/taskMapper';
-import { RawTask, Task } from './task-store-models';
+import { RawTask, Task } from './taskStoreTypes';
 
 const service = {
   async retrieveTasks(): Promise<Array<Task>> {

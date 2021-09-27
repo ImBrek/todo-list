@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 
-import { Account } from '../../store/account-store/account-store-type';
+import { Account } from '../../store/account-store/accountStoreTypes';
 
 import './profile.css';
 import avatar from './img/avatar.png';

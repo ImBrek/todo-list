@@ -1,4 +1,4 @@
-import { User } from './account-store-type';
+import { User } from './accountStoreTypes';
 
 const service = {
   async signIn(username: string, password: string): Promise<User> {

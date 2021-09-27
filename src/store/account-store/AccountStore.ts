@@ -1,7 +1,7 @@
 import { observable, action, makeObservable, runInAction } from 'mobx';
 
-import { Account } from './account-store-type';
-import service from './account-store-service';
+import { Account } from './accountStoreTypes';
+import service from './accountStoreService';
 
 class AccountStore {
   user?: Account = undefined;

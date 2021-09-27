@@ -1,4 +1,4 @@
-import { RawTask, Task } from '../../store/task-store/task-store-models';
+import { RawTask, Task } from '../../store/task-store/taskStoreTypes';
 
 const taskMapper = (rawTask: RawTask): Task => {
   const randomNumber = Math.floor(Math.random() * 10);

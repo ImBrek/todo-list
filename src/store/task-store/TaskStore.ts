@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 import { makeObservable, runInAction, observable, action, computed } from 'mobx';
 
-import { Task } from './task-store-models';
-import service from './task-store-service';
+import { Task } from './taskStoreTypes';
+import service from './taskStoreService';
 
 class TaskStore {
   tasks: Array<Task> = [];
