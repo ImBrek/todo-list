@@ -16,8 +16,6 @@ const TodoList: FC = observer(() => {
     completedTasksCount,
     tasksCount,
     addTask,
-    updateStatus,
-    removeTask,
   } = taskStore;
 
   const createTask = () => {
@@ -47,6 +45,7 @@ const TodoList: FC = observer(() => {
             date={formatDate(data.createdAt)}
             key={data.id}
             completed={data.completed}
+            archived={data.archived}
             id={data.id}
           ></TodoItem>
         ))}

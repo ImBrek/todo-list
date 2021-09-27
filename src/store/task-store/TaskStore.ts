@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 import { makeObservable, runInAction, observable, action, computed } from 'mobx';
 
-import 'moment/locale/ru';
 import { Task } from './task-store-models';
 import service from './task-store-service';
 
@@ -72,11 +71,11 @@ class TaskStore {
         this.tasks = this.tasks.filter(item => item.id !== taskId);
       });
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 
-  async updateStatus(task: Task): Promise<void> {
+  async updateStatus(task: Partial<Task>): Promise<void> {
     try {
       const newTasks = this.tasks.map(item => {
         if (item.id === task.id) {
@@ -89,7 +88,7 @@ class TaskStore {
       });
       await service.updateTask(task);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 }

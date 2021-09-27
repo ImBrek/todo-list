@@ -7,55 +7,56 @@ import './todo-item.css';
 import archive from './img/archive.svg';
 
 type TodoItemProps = {
+  id: number;
   title: string;
   date: string;
   completed: boolean;
-  id: number;
-  // onClick: any;
-  // changeStatus: Promise<void>;
-  // updateStatus: (task: Task) => Promise<void>;
+  archived?: boolean;
 };
 
-const TodoItem: FC<TodoItemProps> = observer(({ title, date, completed, id }) => {
-  const [checked, setChecked] = useState(completed);
+const TodoItem: FC<TodoItemProps> = observer(
+  ({ title, date, completed, id, archived }) => {
+    if (archived) return null;
+    const [checked, setChecked] = useState(completed);
 
-  const { updateStatus, removeTask } = taskStore;
+    const { updateStatus } = taskStore;
 
-  const onChange = () => {
-    setChecked(!checked);
-  };
+    const onChange = () => {
+      setChecked(!checked);
+    };
 
-  const onClick = () => {
-    removeTask(id);
-  };
+    const onClick = () => {
+      updateStatus({ id, archived: true });
+    };
 
-  useEffect(() => {
-    updateStatus({ id, title, completed: checked });
-  }, [checked]);
+    useEffect(() => {
+      updateStatus({ id, completed: checked });
+    }, [checked]);
 
-  return (
-    <div className="todo-item">
-      <div className="todo-item__cell">{title}</div>
-      <div className="todo-item__cell">{date}</div>
-      <div className="todo-item__cell">
-        <input
-          className="todo-item__checkbox"
-          type="checkbox"
-          checked={completed}
-          onChange={onChange}
-        />
+    return (
+      <div className="todo-item">
+        <div className="todo-item__cell">{title}</div>
+        <div className="todo-item__cell">{date}</div>
+        <div className="todo-item__cell">
+          <input
+            className="todo-item__checkbox"
+            type="checkbox"
+            checked={completed}
+            onChange={onChange}
+          />
+        </div>
+        <div className="todo-item__cell">
+          <input
+            className="todo-item__archive"
+            type="image"
+            src={archive}
+            alt="archive"
+            onClick={onClick}
+          />
+        </div>
       </div>
-      <div className="todo-item__cell">
-        <input
-          className="todo-item__archive"
-          type="image"
-          src={archive}
-          alt="archive"
-          onClick={onClick}
-        />
-      </div>
-    </div>
-  );
-});
+    );
+  },
+);
 
 export default TodoItem;
