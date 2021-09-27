@@ -1,28 +1,35 @@
+import React, { FC } from 'react';
 import { observer } from 'mobx-react-lite';
-import React, { FC, useEffect, useState } from 'react';
-import { useStore } from '../../store';
+import moment from 'moment';
+import 'moment/locale/ru';
+
+import taskStore from '../../store/task-store/TaskStore';
 import TodoItem from '../todo-item';
+
 import './todo-list.css';
 
 const TodoList: FC = observer(() => {
-  const store = useStore();
-  const { tasksName } = store;
-  const [texts, setTexts] = useState(tasksName);
-  const [searchValue, setSearchValue] = useState('');
+  const {
+    filteredTasks,
+    changeFilter,
+    filterQuery,
+    completedTasksCount,
+    tasksCount,
+    addTask,
+    updateStatus,
+    removeTask,
+  } = taskStore;
 
-  useEffect(() => {
-    const regexp = new RegExp(searchValue, 'gi');
-    const newList = tasksName.filter(data => data.name.match(regexp));
-    setTexts(newList);
-  }, [searchValue]);
+  const createTask = () => {
+    const taskName = prompt('Введите название');
+    if (taskName) addTask(taskName);
+  };
 
-  useEffect(() => {
-    setTexts(tasksName);
-  }, [store, tasksName]);
+  const onChangeFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
+    changeFilter(event.target.value);
+  };
 
-  useEffect(() => {
-    store.getUserData();
-  }, [store]);
+  const formatDate = (date: string) => moment(date, 'YYYYMMDD, hh:mm:ss').fromNow();
 
   return (
     <div className="todo-list">
@@ -30,26 +37,26 @@ const TodoList: FC = observer(() => {
         className="todo-list__search"
         type="search"
         placeholder="search"
-        value={searchValue}
-        onChange={event => setSearchValue(event.target.value)}
+        value={filterQuery}
+        onChange={onChangeFilter}
       />
       <div className="todo-list__items">
-        {texts.map(data => (
+        {filteredTasks.map(data => (
           <TodoItem
-            name={data.name}
-            date={data.date.fromNow()}
-            key={data.date.fromNow()}
-            complete={data.complete}
-            onClick={() => store.removeTask(data)}
+            title={data.title}
+            date={formatDate(data.createdAt)}
+            key={data.id}
+            completed={data.completed}
+            id={data.id}
           ></TodoItem>
         ))}
       </div>
       <div className="todo-list__footer">
-        <button className="todo-list__button" onClick={() => store.addTask()}>
+        <button className="todo-list__button" onClick={createTask}>
           новая задача
         </button>
         <div className="todo-list__complete">
-          {store.completedTasksCount} из {store.tasksCount} задач выполнены
+          {completedTasksCount} из {tasksCount} задач выполнены
         </div>
       </div>
     </div>
