@@ -3,6 +3,7 @@ export type Task = {
   title: string;
   createdAt: string;
   completed: boolean;
+  archived?: boolean;
 };
 
 export type RawTask = {

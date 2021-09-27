@@ -30,13 +30,14 @@ const service = {
       });
   },
 
-  async updateTask(task: Task): Promise<void> {
-    const { id, completed } = task;
+  async updateTask(task: Partial<Task>): Promise<void> {
+    const { id, completed, archived } = task;
 
     fetch(`https://jsonplaceholder.typicode.com/todos/${id}`, {
       method: 'PUT',
       body: JSON.stringify({
         completed,
+        archived,
       }),
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
