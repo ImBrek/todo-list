@@ -1,5 +1,4 @@
-import React from 'react';
-import { observer } from 'mobx-react-lite';
+import React, { FC } from 'react';
 
 import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 import RegistrationPage from './pages/registration';
@@ -7,7 +6,7 @@ import TodoListPage from './pages/todo-list';
 
 import './app.css';
 
-const App = observer(() => {
+const App: FC = () => {
   return (
     <Router>
       <div className="app">
@@ -22,6 +21,6 @@ const App = observer(() => {
       </div>
     </Router>
   );
-});
+};
 
 export default App;

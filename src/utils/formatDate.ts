@@ -6,7 +6,6 @@ const formattedDate = {
     return moment(date, 'YYYYMMDD, hh:mm:ss').fromNow();
   },
   dateNow(): string {
-    console.log(moment().format('YYYYMMDD, HH:MM:SS'));
     return moment().format('YYYYMMDD, hh:mm:ss');
   },
 };
